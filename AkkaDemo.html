@@ -1,0 +1,627 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta content="en-gb" http-equiv="Content-Language" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>Introduction</title>
+<style type="text/css">
+.auto-style1 {
+	background-color: #FFFF00;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Introduction</h1>
+<p>A while back I became quite interested in messaging, I have always used 
+things like Signalr,WCF, MSMQ, and NServiceBus, which are all cool tech for 
+sure. I did however, feel I wanted to learn a bit more, so spent quite a few 
+months experimenting with thing like</p>
+<p>&nbsp;</p>
+<ul>
+	<li>EasyMQ (RabbitMQ based servicebus stylee API)</li>
+	<li>Azure ServiceBus</li>
+	<li>NetMQ</li>
+</ul>
+<p>&nbsp;</p>
+<p>Whilst in this messaging stage of my life I came across something that really 
+spiked my interest which is the use of&nbsp; "Actor(s)" for distributed 
+programming. Actors pop up in various frameworks such as:</p>
+<ul>
+	<li><a href="https://github.com/dotnet/orleans" target="_blank">Microsoft 
+	Orleans</a> : Distributed Virtual Actor Model</li>
+	<li>
+	<a href="https://www.google.co.uk/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;uact=8&amp;ved=0CCgQFjAB&amp;url=http%3A%2F%2Fdownload.microsoft.com%2Fdownload%2FB%2FD%2F5%2FBD51FFB2-C777-43B0-AC24-BDE3C88E231F%2FAxum%2520Programmers%2520Guide.pdf&amp;ei=4deUVdDXE4HN7QaW7I-AAw&amp;usg=AFQjCNEgP-7XJiXae6Cws6TAtOfHDZ3ktw&amp;sig2=k7dtANcOlMXDtyBAng-h5A&amp;bvm=bv.96952980,d.ZGU" target="_blank">
+	Microsoft Axum</a> : A research project, which never made it into production 
+	which I think is sad</li>
+	<li><a href="http://akka.io/" target="_blank">Akka</a> : Java / Scala based 
+	Actor model</li>
+	<li><a href="http://getakka.net/" target="_blank">Akka.NET</a> : .NET port 
+	of Akka</li>
+</ul>
+<p>&nbsp;</p>
+<p>This article will be about using
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> which is a pretty 
+complete port of the original <a href="http://akka.io/" target="_blank">Akka</a>, 
+so you will pretty much see how that works by the end of this too I hope.</p>
+<p>&nbsp;</p>
+<h1>Demo App Code</h1>
+<p class="auto-style1">TODO</p>
+<p class="auto-style1">TODO</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h1>Some Actor Background Waffle</h1>
+<p>This is not the 1st time I have written about Actor models, in fact a while 
+back I wrote quite a long post (which is good background reading) about an Actor 
+model that I wrote for NetMQ (the .NET port of ZeroMQ). You can read that post 
+here:</p>
+<p>
+<a href="https://sachabarbs.wordpress.com/2014/09/05/zeromq-7-a-simple-actor-model/">
+https://sachabarbs.wordpress.com/2014/09/05/zeromq-7-a-simple-actor-model/</a></p>
+<p>
+&nbsp;</p>
+<p>I was very pleased but this actually made its way into the the actual NetMQ 
+codebase, and is fully documented here:</p>
+<p>
+<a href="http://netmq.readthedocs.org/en/latest/actor/">
+http://netmq.readthedocs.org/en/latest/actor/</a></p>
+
+<p>This next bit of text is lifted directly from the post/documentation that I 
+had previous written, though you should still read those if you are interested 
+in seeing the specific NetMQ implementation works.</p>
+<p>Anyway lets dive it shall we........</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<h2>Tell Me More About This Actor Shennanigans</h2>
+
+
+<h3>What Is An Actor Model?</h3>
+
+
+<p>Here is what Wikipedia has to same in the introduction to what an Actor Model is.</p>
+
+<p>The actor model in computer science is a mathematical model of concurrent computation that treats “actors” as the universal primitives of concurrent digital computation: in response to a message that it receives, an actor can make local decisions, create more actors, send more messages, and determine how to respond to the next message received.<p>
+&nbsp;</p>
+<p>
+….
+<br/>
+….
+</p>
+<p>The Actor model adopts the philosophy that everything is an actor. This is similar to the everything is an object philosophy used by some object-oriented programming languages, but differs in that object-oriented software is typically executed sequentially, while the Actor model is inherently concurrent.</p>
+
+<p>An actor is a computational entity that, in response to a message it receives, can concurrently:</p>
+
+<p>
+<ul>
+	<li>send a finite number of messages to other actors</li>
+	<li>create a finite number of new actors</li>
+	<li>designate the behavior to be used for the next message it receives.
+</li>
+</ul>
+</p>
+<p>There is no assumed sequence to the above actions and they could be carried out in parallel.</p>
+<p>Decoupling the sender from communications sent was a fundamental advance of the Actor model enabling asynchronous communication and control structures as patterns of passing messages.</p>
+<p>Recipients of messages are identified by address, sometimes called “mailing address”. Thus an actor can only communicate with actors whose addresses it has. It can obtain those from a message it receives, or if the address is for an actor it has itself created.</p>
+<p>The Actor model is characterized by inherent concurrency of computation within and among actors, dynamic creation of actors, inclusion of actor addresses in messages, and interaction only through direct asynchronous message passing with no restriction on message arrival order.</p>
+<p>&nbsp;</p>
+
+<p><a href="http://en.wikipedia.org/wiki/Actor_model" target="_blank">http://en.wikipedia.org/wiki/Actor_model</a></p>
+
+
+
+
+<p>&nbsp;</p>
+<p>How I like to think of Actors is that they may be used to alleviate some of 
+synchronization concerns of using shared data structures. This is achieved by 
+your application code talking to actors via message passing/receiving. The actor 
+itself may pass messages to other actors, or work on the passed message itself. 
+By using message passing rather than using shared data structures, it may help 
+to think of the actor (or any subsequent actors its send messages to) working on 
+a copy of the data rather than working on the same shared structures. Which kind 
+of gets rid of the need to worry about nasty things like lock(s) and any nasty 
+timing issues that may arise from carrying out multi threaded code. If the actor 
+is working with its own copy of the data then we should have no issues with 
+other threads wanting to work with the data the actor has, as the only place 
+that data can be is within the actor itself, that is unless we pass another 
+message to a different actor. If we were to do that though the new message to 
+the other actor would also be a copy of the data, so would also be thread safe.</p>
+<p>&nbsp;</p>
+<p>I hope you see what I am trying to explain there, may be a diagram may help.</p>
+<p>&nbsp;</p>
+<h3><strong>Multi Threaded Application Using Shared Data Structure</strong></h3>
+<p>A fairly common thing to do is have multiple threads running to speed things 
+up, but then you realise that your threads need to mutate the state of some 
+shared data structure, so then you have to involve threading synchronization 
+primitives (most commonly lock(..) statements, to create your user defined 
+critical sections). This will work, but now you are introducing artificial 
+delays due to having to wait for the lock to be released so you can run Thread 
+X’s code.</p>
+<p><img alt="" height="372" src="mtTYpical.png" width="589" /></p>
+<p>To take this one step further, lets see some code that may illustrate this 
+further, imagine we had this sort of data structure representing a very slim 
+bank account</p>
+<pre lang="cs">
+namespace ConsoleApplication1
+{
+    public class Account
+    {
+        public Account()
+        {
+
+        }
+
+        public Account(int id, string name, 
+            string sortCode, decimal balance)
+        {
+            Id = id;
+            Name = name;
+            SortCode = sortCode;
+            Balance = balance;
+        }
+
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string SortCode { get; set; }
+        public decimal Balance { get; set; }
+    }
+}
+</pre>
+<p>Nothing fancy there, just some fields. So lets now move onto looking at some threading code, I have chosen to just show two threads acting on a shared Account instance.</p>
+<pre lang="cs">
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Management.Instrumentation;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+namespace ConsoleApplication1
+{
+    class Program
+    {
+        private object syncLock = new object();
+        private Account clientBankAccount;
+        public Program()
+        {
+            clientBankAccount = new Account(1,"sacha barber","112233",0);
+        }
+
+        public async Task Run()
+        {
+            try
+            {
+                await Task.Run(() =&gt;
+                {
+                    Console.WriteLine("Tread Id {0}, Account balance before: {1}", 
+                        Thread.CurrentThread.ManagedThreadId, clientBankAccount.Balance);
+                        
+                    lock (syncLock)
+                    {
+                        Console.WriteLine("Tread Id {0}, Adding 10 to balance",
+                           Thread.CurrentThread.ManagedThreadId);
+                        clientBankAccount.Balance += 10;
+                        Console.WriteLine("Tread Id {0}, Account balance before: {1}",
+                            Thread.CurrentThread.ManagedThreadId, clientBankAccount.Balance);
+                    }
+                });
+
+                await Task.Run(() =&gt;
+                {
+                    Console.WriteLine("Tread Id {0}, Account balance before: {1}",
+                        Thread.CurrentThread.ManagedThreadId, clientBankAccount.Balance);
+                    lock (syncLock)
+                    {
+                        Console.WriteLine("Tread Id {0}, Subtracting 4 to balance",
+                           Thread.CurrentThread.ManagedThreadId);
+                        clientBankAccount.Balance -= 4;
+                        Console.WriteLine("Tread Id {0}, Account balance before: {1}",
+                            Thread.CurrentThread.ManagedThreadId, clientBankAccount.Balance);
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+        }
+
+        static void Main(string[] args)
+        {
+           Program p = new Program();
+           p.Run().Wait();
+           Console.ReadLine();
+        }
+    }
+}
+</pre>
+<p>
+I have possible picked an example that you think may not actually happen in real life, and to be honest this scenario may not popup in real life, as who would do something as silly as crediting an account in one thread, and debiting it in another…we are all diligent developers, we would not let this one into the code would we?
+</p>
+<p>
+<br/>
+To be honest whether the actual example has real world merit or not, the point remains the same, since we have more than one thread accessing a shared data structure, access to it must be synchronized, which is typically done using a lock(..) statement, as can be seen in the code.
+<br/>
+Now don’t get me wrong the above code does work, as shown in the output below:
+</p>
+<p>
+&nbsp;</p>
+<p>
+<img alt="" height="179" src="cons1.png" width="446" /></p>
+<p>
+Perhaps there might be a more interesting way though!</p>
+<p>
+&nbsp;</p>
+<h3>Actor Model</h3>
+
+<p>The actor model, takes a different approach, where by message passing is used, which may involve some form of serialization as the messages are passed down the wire, which kind of guarantees no shared structures to contend with. 
+</p>
+
+<p>
+&nbsp;</p>
+<p>
+<img alt="" height="388" src="actor1.png" width="587" /></p>
+<p>
+&nbsp;</p>
+<p>
+&nbsp;</p>
+<p>
+So that was a little introduction/catch up, so what will the rest of the article 
+be about. Well the rest of the article will be about how to develop code in .NET 
+which makes use of an Actor Model. We will be proceeding on to look at how to 
+use&nbsp;
+<a href="http://getakka.net/" target="_blank">Akka.NET</a>, I will not be 
+covering a
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> version of the sample 
+above but shall instead build apon a new
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> sample.</p>
+<p>
+&nbsp;</p>
+<p>
+&nbsp;</p>
+<p>
+&nbsp;</p>
+
+
+
+
+
+<h1>Akka.Net</h1>
+<p>As stated already
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> is a direct port of <a href="http://akka.io/" target="_blank">Akka</a>, 
+and its pretty complete.</p>
+<p>&nbsp;</p>
+<h2>Training Guide</h2>
+<p>There is a truly excellent training guide with start to finish examples that 
+you can go through, where it is nicely broken up into bite sized labs, there are 
+3 parts with around 6 labs in each. You can grab that from this url :</p>
+<p>
+<a href="https://github.com/petabridge/akka-bootcamp">https://github.com/petabridge/akka-bootcamp</a></p>
+<p>&nbsp;</p>
+<p>I <strong>strongly</strong> (see what I did there with my awesome <code>&lt;strong&gt;strongly&lt;/strong&gt;</code> html skills) you read this, and have a go.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h1>Akka.NET And Demo App</h1>
+<p>The rest of this article will be about a demo app, which I have shamelessly 
+stolen from the completed part 1 labs from the
+<a href="https://github.com/petabridge/akka-bootcamp">https://github.com/petabridge/akka-bootcamp</a> 
+training guide. Its a great place to start, and the way I see it I am sharing 
+the
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> love, so they would 
+be happy. </p>
+<p>I will of course be adding a bit of new stuff, which is not covered.</p>
+<p>&nbsp;</p>
+<h2>The Actor System</h2>
+<p>
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> is as already stated 
+an actor framework for .NET.
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> is made up of a 
+couple of system level actors (which are not within your control, they are part 
+of
+<a href="http://getakka.net/" target="_blank">Akka.NET</a>). These top level 
+actors are known as "Guardians". You never really deal with these directly. 
+Instead you are expected to create Actors within one of the following 2 
+contexts:</p>
+<ol>
+	<li>Within the context of the
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> actor system</li>
+	<li>Within the context of an existing actor, where the newly created actor 
+	will be a child actor of the context in which it is created.</li>
+</ol>
+<p>&nbsp;</p>
+<p>Lets see an example of how to create an actor within the actor system (don't 
+worry for now if this looks weird, the <code>Props </code>stuff here will be explained in 
+just a moment)</p>
+<pre lang="cs">
+// make actor system 
+MyActorSystem = ActorSystem.Create("MyActorSystem");
+
+// create top-level actors within the actor system
+Props consoleWriterProps = Props.Create&lt;ConsoleWriterActor&gt;();
+IActorRef consoleWriterActor = MyActorSystem.ActorOf(consoleWriterProps, "consoleWriterActor");
+
+Props tailCoordinatorProps = Props.Create(() =&gt; new TailCoordinatorActor());
+IActorRef tailCoordinatorActor = MyActorSystem.ActorOf(tailCoordinatorProps, "tailCoordinatorActor");
+
+// blocks the main thread from exiting until the actor system is shut down
+MyActorSystem.AwaitTermination();</pre>
+<p>&nbsp;</p>
+<p>It can be seen there is an
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> <code>ActorSystem
+</code>which we are using here to create actors, where we use some strange <code>
+Props </code>voodoo.. These actors will be supervised by the
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> guardians. Again we 
+will get onto supervision in a while.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h2>Props - How You Create A New Actor</h2>
+<p><code>Props </code>is the object you use to create an actor. You MUST use 
+Props to create an actor within the main <code>ActorSystem </code>or within the scope of another 
+actor. But how can we use this <code>Props </code>thing?</p>
+<p>There are different ways to create to create actors using <code>Props</code>, 
+let's see a few examples.</p>
+<p>&nbsp;</p>
+<p>If the actor itself has a default constructor, we can use this form of Props</p>
+<pre lang="cs">
+Props consoleWriterProps = Props.Create&lt;ConsoleWriterActor&gt;();</pre>
+<pre lang="cs">
+
+</pre>
+<p>If however the actor constructor expects parameters, we can use this form of Props</p>
+<pre lang="cs">
+Props someNonDefaultProps = Props.Create(() =&gt; new SomeNonDefaultActor(someDependency));
+IActorRef someNonDefaultActor= MyActorSystem.ActorOf(someNonDefaultProps , "someNonDefaultActor");
+</pre>
+<p>&nbsp;</p>
+<p>There is also another way where you add a static factory method to the actual 
+actor class and have that return <code>Props</code>, and you make use of that. </p>
+<p>&nbsp;</p>
+<p>In all of these cases a thing called an <code>IActorRef </code>is returned. 
+What's that I hear you ask. Well quite simply a <code>IActorRef </code>is a 
+handle to an actor within the system. If you have a <code>IActorRef </code>to an 
+actor, you can Tell/Ask that actor things. You can of course pass <code>
+IActorRef </code>about.</p>
+<p>The other thing to note with the <code>Props </code>class is that it acts as 
+a way of capturing (via closures that are captured the 1st time the actor is 
+created) the input parameters, such that the <code>Props </code>also act as a 
+factory for recreating the actor should it die (either by programatic choice or 
+via a supervising strategy).</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h2>Creating Child Actors</h2>
+<p>We have seen how to create actors in the overall
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> system, and I also 
+elluded to the fact that you could create actors within the context of other 
+actors. So how do you do that. Well it is quite simple, and it builds on the
+<code>Props </code>stuff we just covered. Here is an example:</p>
+<pre lang="cs">
+public class TailCoordinatorActor : UntypedActor
+{
+    protected override void OnReceive(object message)
+    {
+        if (message is StartTail)
+        {
+            var msg = message as StartTail;
+            Context.ActorOf(Props.Create(() =&gt; new TailActor(msg.ReporterActor, msg.FilePath)));
+        }
+    }
+}</pre>
+<p>The important line is this one</p>
+<pre lang="cs"> Context.ActorOf(Props.Create(() =&gt; new TailActor(msg.ReporterActor, msg.FilePath)));</pre>
+<p>As stated above when you use the <code>Conntext.ActorOf(..)</code> you are 
+creating a new actor in the context of this actor. That means the newly created 
+actor is a child of the current actor. As such it becomes job of the current 
+actor to "<strong>Supervise</strong>" this new child actor. We will talk more 
+about this in a minute.</p>
+<p>&nbsp;</p>
+<h2>Supervision</h2>
+<p>&nbsp;</p>
+<p class="auto-style1">TODO </p>
+<p class="auto-style1">TODO </p>
+<p class="auto-style1">TODO</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h2>ActorRef</h2>
+<p>As stated already an <code>IActorRef </code>is an astracted handle to an 
+actual actor. By using the <code>IActorRef </code>you can perform all the common 
+requirements you could expect from a
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> actor.</p>
+<p>&nbsp;</p>
+<p>Shown below is an example of what sort of methods are available to you:</p>
+<p>&nbsp;</p>
+<p><img alt="" height="576" src="actorRef.png" width="790" /></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h3>Special ActorRefs</h3>
+<p>There are a few special <code>IActorRef</code>(s) that you should be aware 
+of.</p>
+<ul>
+	<li><code>Self </code>: That is the current actor, and is only valid within 
+	an actor</li>
+	<li><code>Sender </code>: That is the source of a message, and is only valid 
+	within an actor</li>
+</ul>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h3>Actor Selection</h3>
+<p>Whilst I highly recommend that you ensure that you always have the correct
+<code>IActorRef </code>at hand, should you wish to send a message to it. With 
+possibly deep/complex heirarchies this may not always be possible. But fear not
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> has you covered 
+there. Recall I stated that there were several
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> level actors which 
+you could not use, known as "Guardians".Well these guys form a navigation/supervision system. 
+So you may use thier <code>Path</code>s along with any other actors/child actors you may have created, 
+which allow to get an <code>IActorRef </code>based on what is known as an "<strong>actor 
+selection</strong>" string.</p>
+<p>&nbsp;</p>
+<p>Here is an example:</p>
+<pre lang="cs">
+Context.ActorSelection("akka://MyActorSystem/user/validationActor").Tell(message);</pre>
+<p>&nbsp;</p>
+<p>Part of that Path ("<code>MyActorSystem</code>") comes from the place where you created the overall
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> actor system, which 
+was like this for the demo</p>
+<pre lang="cs">MyActorSystem = ActorSystem.Create("MyActorSystem");</pre>
+<p>&nbsp;</p>
+<p>The next part is one of the special guardians path values ("<code>user</code>") within the 
+overall
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> actor system. From 
+there it is just a case of specifying the <code>IActorRef </code>we want.</p>
+<p>&nbsp;</p>
+<p>You can read more about thee guradians within
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> here:</p>
+<p>&nbsp;</p>
+<p class="auto-style1">TODO Grab Url</p>
+<p class="auto-style1">TODO Grab Url</p>
+<p class="auto-style1">TODO Grab Url</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h2>Sending Messages</h2>
+<p>Ok so we have covered a bit of ground so far, we now know the following:</p>
+<ul>
+	<li>There is a concept of a overall system, with guradians and our own 
+	actors in it</li>
+	<li>There is a concept of a supervisor (and if none is provided one of the 
+	guradians will take this job on)</li>
+	<li>We can use IActorRef(s) to do things with actors. </li>
+</ul>
+<p>&nbsp;</p>
+<p>So its about time we did something with an actor isn't it. So lets do this. 
+Lets see how we deal with sending (Tell) a message and receiving that within the 
+destination actor.</p>
+<p>&nbsp;</p>
+<p>The act of sending a message in
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> is done using a <code>
+IActorRef.Tell(..)</code>. An example of which is as follows:</p>
+<pre lang="cs">consoleReaderActor.Tell(ConsoleReaderActor.StartCommand);</pre>
+<p>&nbsp;</p>
+<p>So now let' see how the receiver deals with this.</p>
+<p>&nbsp;</p>
+<p>NOTE : I am using <code>UntypedActor </code>here but there is also a <code>
+TypedActor </code>if you prefer to use that, which allows you to use a generic
+<code>Receive&lt;T&gt;(..)</code> methods within the constructor of your actor 
+(Say. There are a whole bunch of other life cycle methods that you may override 
+in an actor, I will not be covering those though, I will leave that as an 
+excercise for the reader) 
+instead of having separate methods for each message type seen.It is a matter of 
+taste.</p>
+<p>&nbsp;</p>
+<pre lang="cs">
+class ConsoleReaderActor : UntypedActor
+{
+    public const string StartCommand = "start";
+
+    protected override void OnReceive(object message)
+    {
+        if (message.Equals(StartCommand))
+        {
+           ....
+        }
+    }
+}
+</pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h2>Asking</h2>
+<p>Although I do not cover this in the demo app presented here,&nbsp; providing 
+you have a valid <code>IActorRef </code>you may of course ask it things. </p>
+<p>This is done using the <code>Ask()</code> method.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h2>&nbsp;</h2>
+<p>&nbsp;</p>
+<h2>Logging</h2>
+<p class="auto-style1">TODO Grab Url</p>
+<p class="auto-style1">TODO Grab Url</p>
+<p class="auto-style1">TODO Grab Url</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h2>&nbsp;</h2>
+<h2>Testing</h2>
+<p>In order to test
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> we must install a few 
+more libraries, namely:</p>
+<ul>
+	<li>Akka.TestKit</li>
+	<li>Akka.TestKit.NUnit</li>
+</ul>
+<p>&nbsp;</p>
+<p>Both of which are available as Nuget packages. So once you have those we can 
+create a simple test (I am using NUnit here), where the test may look something 
+like this:</p>
+<pre lang="cs">
+[TestFixture]
+public class TailActorTests : TestKit
+{
+    [Test]
+    public void Show_NotifyTailActor_When_Change_Is_Made_To_File()
+    {
+        string fullFilePath = @"c:\temp\AkkaTest.txt";
+        FileObserver fileObserver = new FileObserver(TestActor, fullFilePath);
+        fileObserver.Start();
+        File.WriteAllText(fullFilePath, "A test message from TailActorTests" + 
+            DateTime.Now.ToString());
+
+        ExpectMsg&lt;TailActor.FileWrite&gt;(x =&gt; fullFilePath.Contains(x.FileName) );
+    }
+}
+</pre>
+<p>&nbsp;</p>
+<p>There are a couple of things to note here, such as:</p>
+<ol>
+	<li>We inherit from a special base class called "<code>TestKit</code>" this 
+	is a special
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> base class that 
+	allows things such as the <code>ExpectMsg&lt;T&gt;(Predicate&lt;T&gt;&gt; pred)</code> that 
+	you see above</li>
+	<li>There is a special <code>TestActor </code>which you may make use of</li>
+	<li>As just stated we can use a <code>ExpectMsg&lt;T&gt;(Predicate&lt;T&gt;&gt; pred)</code>helper 
+	methods to see if certain messages were seen by the <code>TestActor</code></li>
+</ol>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h2>The Actual Demo App</h2>
+<p>As I stated a while ago the demo app has been pretty much lifted from the
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> training material. 
+Let's just go through what the demo app does:</p>
+<ol>
+	<li>There is a <code>ConsoleReaderActor</code>, which expects the user to 
+	type the name of an open text file to monitor for changes.</li>
+	<li>There is a <code>ValidationActor</code>, which verifies whether the user 
+	typed a correct file name in</li>
+	<li>There is a supervising <code>TailCoordinatorActor</code>, which gets a 
+	input file, and sets up a TailActor to starts listening for changes to the 
+	input file</li>
+	<li>There is a <code>TailActor</code>, which will listen for changes in the 
+	input file</li>
+	<li>There is a <code>ConsoleWriterActor</code>, which will write out any 
+	changes observed (Such as new text being input into the orginal text file 
+	that is being tailed) to the console.</li>
+</ol>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h1>That's It</h1>
+<p>That's is all I wanted to say this time, I hope it may has been of interest 
+to at least a few of you. As always if you like what you have seen, please take 
+a minute to cast a vote, or leave a comment this are always appreciated</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+</body>
+
+</html>
