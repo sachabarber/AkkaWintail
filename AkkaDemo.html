@@ -1,20 +1,76 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
 <meta content="en-gb" http-equiv="Content-Language" />
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 <title>Introduction</title>
-<style type="text/css">
-.auto-style1 {
-	background-color: #FFFF00;
-}
-</style>
 </head>
 
 <body>
 
-<h1>Introduction</h1>
+<ul>
+	<li><a href="#Introduction">Introduction</a></li>
+	<li><a href="#Demo-App-Code">Demo App Code</a></li>
+	<li><a href="#Some-Actor-Background-Waffle">Some Actor Background Waffle</a></li>
+	<li><a href="#Tell-Me-More-About-This-Actor-Shennanigans">Tell Me More About This Actor Shennanigans</a></li>
+	<li><a href="#What-Is-An-Actor-Model?">What Is An Actor Model?</a></li>
+	<ul>
+		<li><a href="#Multi-Threaded-Application-Using-Shared-Data-Structure">Multi Threaded Application Using Shared Data Structure</a></li>
+		<li><a href="#Actor-Model">Actor Model</a></li>
+	</ul>
+	<li><a href="#Akka.Net">Akka.Net</a></li>
+	<li><a href="#Training-Guide">Training Guide</a></li>
+
+
+
+	<li><a href="#Akka.NET-And-Demo-App">Akka.NET And Demo App</a></li>
+	<ul>
+		<li><a href="#The-Actor-System">The Actor System</a></li>
+		
+		<li><a href="#Props---Creating-A-New-Actor">Props - Creating A New Actor</a></li>
+		
+		<li><a href="#Props---Creating-Child-Actors">Props - Creating Child Actors</a></li>
+		
+		<li><a href="#Supervision">Supervision</a></li>
+		
+		<li><a href="#ActorRef">ActorRef</a>
+		<ul>
+			<li><a href="#Special-ActorRefs">Special ActorRefs</a></li>
+			
+			<li><a href="#Actor-Selection">Actor Selection</a></li>
+		
+		</ul>
+		<li><a href="#Sending-Messages">Sending Messages</a></li>
+		
+		<li><a href="#Asking">Asking</a></li>
+		
+		<li><a href="#Special-Message-Types">Special Message Types</a>
+		<ul>
+			<li><a href="#PoisonPill.Instance">PoisonPill.Instance</a></li>
+			
+			<li><a href="#Kill.Instance">Kill.Instance</a></li>
+		
+		</ul>
+		
+		<li><a href="#Lifecycle-Methods">Lifecycle Methods</a></li>
+		
+		<li><a href="#Logging">Logging</a></li>
+		
+		<li><a href="#Testing">Testing</a></li>
+		
+		<li><a href="#The-Actual-Demo-App">The Actual Demo App</a></li>
+		
+</ul>
+
+<li><a href="#That's-It">That's It</a></li>
+
+</ul>
+
+
+
+<h1>&nbsp;</h1>
+<h1><a name="Introduction" id="Introduction">Introduction</a></h1>
 <p>A while back I became quite interested in messaging, I have always used 
 things like Signalr,WCF, MSMQ, and NServiceBus, which are all cool tech for 
 sure. I did however, feel I wanted to learn a bit more, so spent quite a few 
@@ -47,13 +103,13 @@ programming. Actors pop up in various frameworks such as:</p>
 complete port of the original <a href="http://akka.io/" target="_blank">Akka</a>, 
 so you will pretty much see how that works by the end of this too I hope.</p>
 <p>&nbsp;</p>
-<h1>Demo App Code</h1>
-<p class="auto-style1">TODO</p>
-<p class="auto-style1">TODO</p>
+<h1><a name="Demo-App-Code" id="Demo-App-Code">Demo App Code</a></h1>
+<p>You can grab the demo code for this article from my github account : 
+<a href="https://github.com/sachabarber/AkkaWintail">
+https://github.com/sachabarber/AkkaWintail</a></p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<p>&nbsp;</p>
-<h1>Some Actor Background Waffle</h1>
+<h1><a name="Some-Actor-Background-Waffle" id="Some-Actor-Background-Waffle">Some Actor Background Waffle</a></h1>
 <p>This is not the 1st time I have written about Actor models, in fact a while 
 back I wrote quite a long post (which is good background reading) about an Actor 
 model that I wrote for NetMQ (the .NET port of ZeroMQ). You can read that post 
@@ -76,10 +132,11 @@ in seeing the specific NetMQ implementation works.</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 
-<h2>Tell Me More About This Actor Shennanigans</h2>
+<h2><a name="Tell-Me-More-About-This-Actor-Shennanigans" id="Tell-Me-More-About-This-Actor-Shennanigans">Tell Me More About This Actor Shennanigans</a></h2>
+<p>&nbsp;</p>
 
 
-<h3>What Is An Actor Model?</h3>
+<h3><a name="What-Is-An-Actor-Model?" id="What-Is-An-Actor-Model?">What Is An Actor Model?</a></h3>
 
 
 <p>Here is what Wikipedia has to same in the introduction to what an Actor Model is.</p>
@@ -132,7 +189,7 @@ the other actor would also be a copy of the data, so would also be thread safe.<
 <p>&nbsp;</p>
 <p>I hope you see what I am trying to explain there, may be a diagram may help.</p>
 <p>&nbsp;</p>
-<h3><strong>Multi Threaded Application Using Shared Data Structure</strong></h3>
+<h3><a name="Multi-Threaded-Application-Using-Shared-Data-Structure" id="<strong>Multi-Threaded-Application-Using-Shared-Data-Structure">Multi Threaded Application Using Shared Data Structure</a></h3>
 <p>A fairly common thing to do is have multiple threads running to speed things 
 up, but then you realise that your threads need to mutate the state of some 
 shared data structure, so then you have to involve threading synchronization 
@@ -256,9 +313,10 @@ Now don’t get me wrong the above code does work, as shown in the output below:
 Perhaps there might be a more interesting way though!</p>
 <p>
 &nbsp;</p>
-<h3>Actor Model</h3>
+<h3><a name="Actor-Model" id="Actor-Model">Actor Model</a></h3>
 
-<p>The actor model, takes a different approach, where by message passing is used, which may involve some form of serialization as the messages are passed down the wire, which kind of guarantees no shared structures to contend with. 
+<p>The actor model, takes a different approach, where by message passing is used, which 
+<strong>MAY</strong> involve some form of serialization as the messages are passed down the wire, which kind of guarantees no shared structures to contend with. 
 </p>
 
 <p>
@@ -290,12 +348,12 @@ above but shall instead build apon a new
 
 
 
-<h1>Akka.Net</h1>
+<h1><a name="Akka.Net" id="Akka.Net">Akka.Net</a></h1>
 <p>As stated already
 <a href="http://getakka.net/" target="_blank">Akka.NET</a> is a direct port of <a href="http://akka.io/" target="_blank">Akka</a>, 
-and its pretty complete.</p>
+and its a pretty complete port at that.</p>
 <p>&nbsp;</p>
-<h2>Training Guide</h2>
+<h2><a name="Training-Guide" id="Training-Guide">Training Guide</a></h2>
 <p>There is a truly excellent training guide with start to finish examples that 
 you can go through, where it is nicely broken up into bite sized labs, there are 
 3 parts with around 6 labs in each. You can grab that from this url :</p>
@@ -305,32 +363,37 @@ you can go through, where it is nicely broken up into bite sized labs, there are
 <p>I <strong>strongly</strong> (see what I did there with my awesome <code>&lt;strong&gt;strongly&lt;/strong&gt;</code> html skills) you read this, and have a go.</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<h1>Akka.NET And Demo App</h1>
-<p>The rest of this article will be about a demo app, which I have shamelessly 
-stolen from the completed part 1 labs from the
+<h1><a name="Akka.NET-And-Demo-App" id="Akka.NET-And-Demo-App">Akka.NET And Demo App</a></h1>
+<p>The rest of this article will be about 
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> internals, and also 
+shall briefly talk about the demo app. I have shamelessly 
+stolen the demo app from the completed part 1 labs from the
 <a href="https://github.com/petabridge/akka-bootcamp">https://github.com/petabridge/akka-bootcamp</a> 
 training guide. Its a great place to start, and the way I see it I am sharing 
 the
 <a href="http://getakka.net/" target="_blank">Akka.NET</a> love, so they would 
 be happy. </p>
-<p>I will of course be adding a bit of new stuff, which is not covered.</p>
+<p>I will of course be adding a bit of new stuff, which is not covered by the 
+labs.</p>
 <p>&nbsp;</p>
-<h2>The Actor System</h2>
+<h2><a name="The-Actor-System" id="The-Actor-System">The Actor System</a></h2>
 <p>
-<a href="http://getakka.net/" target="_blank">Akka.NET</a> is as already stated 
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> is  
 an actor framework for .NET.
 <a href="http://getakka.net/" target="_blank">Akka.NET</a> is made up of a 
 couple of system level actors (which are not within your control, they are part 
 of
 <a href="http://getakka.net/" target="_blank">Akka.NET</a>). These top level 
 actors are known as "Guardians". You never really deal with these directly. 
-Instead you are expected to create Actors within one of the following 2 
+Instead you are expected to create actors within one of the following 2 
 contexts:</p>
 <ol>
 	<li>Within the context of the
 <a href="http://getakka.net/" target="_blank">Akka.NET</a> actor system</li>
 	<li>Within the context of an existing actor, where the newly created actor 
-	will be a child actor of the context in which it is created.</li>
+	will be a child actor of the context in which it is created. And as such 
+	will be supervised by its parent (the chap within whos context this new 
+	actor was spawned)</li>
 </ol>
 <p>&nbsp;</p>
 <p>Lets see an example of how to create an actor within the actor system (don't 
@@ -338,7 +401,7 @@ worry for now if this looks weird, the <code>Props </code>stuff here will be exp
 just a moment)</p>
 <pre lang="cs">
 // make actor system 
-MyActorSystem = ActorSystem.Create("MyActorSystem");
+MyActorSystem = ActorSystem.Create("MyActorSystem"<span lang="en-gb">, config</span>);
 
 // create top-level actors within the actor system
 Props consoleWriterProps = Props.Create&lt;ConsoleWriterActor&gt;();
@@ -358,9 +421,9 @@ Props </code>voodoo.. These actors will be supervised by the
 will get onto supervision in a while.</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<h2>Props - How You Create A New Actor</h2>
-<p><code>Props </code>is the object you use to create an actor. You MUST use 
-Props to create an actor within the main <code>ActorSystem </code>or within the scope of another 
+<h2><a name="Props---Creating-A-New-Actor" id="Props---Creating-A-New-Actor">Props - Creating A New Actor</a></h2>
+<p><code>Props </code>is the object you use to create an actor. You <strong>MUST</strong> use 
+<code>Props </code>to create an actor within the main <code>ActorSystem </code>or within the scope of another 
 actor. But how can we use this <code>Props </code>thing?</p>
 <p>There are different ways to create to create actors using <code>Props</code>, 
 let's see a few examples.</p>
@@ -383,16 +446,16 @@ actor class and have that return <code>Props</code>, and you make use of that. <
 <p>In all of these cases a thing called an <code>IActorRef </code>is returned. 
 What's that I hear you ask. Well quite simply a <code>IActorRef </code>is a 
 handle to an actor within the system. If you have a <code>IActorRef </code>to an 
-actor, you can Tell/Ask that actor things. You can of course pass <code>
-IActorRef </code>about.</p>
-<p>The other thing to note with the <code>Props </code>class is that it acts as 
-a way of capturing (via closures that are captured the 1st time the actor is 
+actor, you can <code>Tell</code>/<code>Ask </code>that actor things. You can of course pass <code>
+IActorRef</code>s about.</p>
+<p>The other thing to note with the <code>Props </code>class, is that it acts as 
+a way of capturing (via closures that capture the input parameters the 1st time the actor is 
 created) the input parameters, such that the <code>Props </code>also act as a 
 factory for recreating the actor should it die (either by programatic choice or 
 via a supervising strategy).</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<h2>Creating Child Actors</h2>
+<h2><a name="Props---Creating-Child-Actors" id="Props---Creating-Child-Actors">Props - Creating Child Actors</a></h2>
 <p>We have seen how to create actors in the overall
 <a href="http://getakka.net/" target="_blank">Akka.NET</a> system, and I also 
 elluded to the fact that you could create actors within the context of other 
@@ -414,19 +477,85 @@ public class TailCoordinatorActor : UntypedActor
 <pre lang="cs"> Context.ActorOf(Props.Create(() =&gt; new TailActor(msg.ReporterActor, msg.FilePath)));</pre>
 <p>As stated above when you use the <code>Conntext.ActorOf(..)</code> you are 
 creating a new actor in the context of this actor. That means the newly created 
-actor is a child of the current actor. As such it becomes job of the current 
+actor is a child of the current actor. As such, it becomes job of the current 
 actor to "<strong>Supervise</strong>" this new child actor. We will talk more 
-about this in a minute.</p>
+about this next.</p>
 <p>&nbsp;</p>
-<h2>Supervision</h2>
+<h2><a name="Supervision" id="Supervision">Supervision</a></h2>
+<p>Within <a href="http://getakka.net/" target="_blank">Akka.NET</a> we now know 
+that we can create our own heirarchies of actors. The leaf actors 
+(subordinate(s))&nbsp; will be supervised by their parents and so on, all the 
+way up through the <a href="http://getakka.net/" target="_blank">kka.NET</a> top level system 
+actors (the "Guardians")</p>
 <p>&nbsp;</p>
-<p class="auto-style1">TODO </p>
-<p class="auto-style1">TODO </p>
-<p class="auto-style1">TODO</p>
+<p><em>When a subordinate detects a failure (i.e. throws an exception), it 
+suspends itself and all its subordinates and sends a message to its supervisor, 
+signaling failure. Depending on the nature of the work to be supervised and the 
+nature of the failure, the supervisor has a choice of the following four 
+options:</em></p>
+<ul>
+	<li><em>Resume the subordinate, keeping its accumulated internal state</em></li>
+	<li><em>Restart the subordinate, clearing out its accumulated internal state</em></li>
+	<li><em>Stop the subordinate permanently</em></li>
+	<li><em>Escalate the failure to the next parent in the hierarchy, thereby failing itself</em></li>
+</ul>
+<p><em>It is important to always view an actor as part of a supervision hierarchy, 
+which explains the existence of the fourth choice (as a supervisor also is 
+subordinate to another supervisor higher up) and has implications on the first 
+three: resuming an actor resumes all its subordinates, restarting an actor 
+entails restarting all its subordinates (but see below for more details), 
+similarly terminating an actor will also terminate all its subordinates. It 
+should be noted that the default behavior of the PreRestart hook of the Actor 
+class is to terminate all its children before restarting, but this hook can be 
+overridden; the recursive restart applies to all children left after this hook 
+has been executed.<br /><br />Each supervisor is configured with a function translating all possible failure 
+causes (i.e. exceptions) into one of the four choices given above; </em></p>
+<p>
+<a href="http://getakka.net/docs/concepts/supervision">
+http://getakka.net/docs/concepts/supervision</a></p>
+<p>&nbsp;</p>
+<p>In <a href="http://getakka.net/" target="_blank">Akka.NET</a> there are 2 
+classes of supervision strateegy, which are as follows:</p>
+<p>&nbsp;</p>
+<ul>
+	<li><strong>OneForOneStrategy</strong> : This means that only the failed 
+	child would get the parental directive (see above) applied to it</li>
+	<li><strong>AllForOneStrategy</strong> : This means that all children would 
+	the get the parental directive (see above) applied to it</li>
+</ul>
+<p>&nbsp;</p>
+<p>So that is the theory, so how does this translate to code. Each actor will 
+allow you to override the supervising strategy (the default is <code>
+OneForOneStrategy</code>), as shown below. I think the code block below is 
+fairly self explanatory.</p>
+<p>&nbsp;</p>
+<p>Lets see an 
+example.</p>
+<pre lang="cs">
+// here we are overriding the default SupervisorStrategy
+// which is a One-For-One strategy w/ a Restart directive
+protected override SupervisorStrategy SupervisorStrategy()
+{
+    return new OneForOneStrategy (
+        10, // maxNumberOfRetries
+        TimeSpan.FromSeconds(30), // duration
+        x =&gt;
+        {
+            //Maybe we consider ArithmeticException to not be application critical
+            //so we just ignore the error and keep going.
+            if (x is ArithmeticException) return Directive.Resume;
+
+            //Error that we cannot recover from, stop the failing actor
+            else if (x is NotSupportedException) return Directive.Stop;
+
+            //In all other cases, just restart the failing actor
+            else return Directive.Restart;
+        });
+}
+</pre>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<p>&nbsp;</p>
-<h2>ActorRef</h2>
+<h2><a name="ActorRef" id="ActorRef">ActorRef</a></h2>
 <p>As stated already an <code>IActorRef </code>is an astracted handle to an 
 actual actor. By using the <code>IActorRef </code>you can perform all the common 
 requirements you could expect from a
@@ -437,7 +566,7 @@ requirements you could expect from a
 <p><img alt="" height="576" src="actorRef.png" width="790" /></p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<h3>Special ActorRefs</h3>
+<h3><a name="Special-ActorRefs" id="Special-ActorRefs">Special ActorRefs</a></h3>
 <p>There are a few special <code>IActorRef</code>(s) that you should be aware 
 of.</p>
 <ul>
@@ -448,7 +577,7 @@ of.</p>
 </ul>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<h3>Actor Selection</h3>
+<h3><a name="Actor-Selection" id="Actor-Selection">Actor Selection</a></h3>
 <p>Whilst I highly recommend that you ensure that you always have the correct
 <code>IActorRef </code>at hand, should you wish to send a message to it. With 
 possibly deep/complex heirarchies this may not always be possible. But fear not
@@ -474,29 +603,25 @@ overall
 <a href="http://getakka.net/" target="_blank">Akka.NET</a> actor system. From 
 there it is just a case of specifying the <code>IActorRef </code>we want.</p>
 <p>&nbsp;</p>
-<p>You can read more about thee guradians within
-<a href="http://getakka.net/" target="_blank">Akka.NET</a> here:</p>
-<p>&nbsp;</p>
-<p class="auto-style1">TODO Grab Url</p>
-<p class="auto-style1">TODO Grab Url</p>
-<p class="auto-style1">TODO Grab Url</p>
+<p>You can read more about paths/selection and guardians within
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> here:
+<a href="http://getakka.net/docs/concepts/addressing">
+http://getakka.net/docs/concepts/addressing</a></p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<h2>Sending Messages</h2>
+<h2><a name="Sending-Messages" id="Sending-Messages">Sending Messages</a></h2>
 <p>Ok so we have covered a bit of ground so far, we now know the following:</p>
 <ul>
 	<li>There is a concept of a overall system, with guradians and our own 
 	actors in it</li>
 	<li>There is a concept of a supervisor (and if none is provided one of the 
 	guradians will take this job on)</li>
-	<li>We can use IActorRef(s) to do things with actors. </li>
+	<li>We can use <code>IActorRef</code>(s) to do things with actors. </li>
 </ul>
 <p>&nbsp;</p>
 <p>So its about time we did something with an actor isn't it. So lets do this. 
-Lets see how we deal with sending (Tell) a message and receiving that within the 
+Lets see how we deal with sending (<code>Tell</code>) a message and receiving that within the 
 destination actor.</p>
 <p>&nbsp;</p>
 <p>The act of sending a message in
@@ -512,7 +637,8 @@ TypedActor </code>if you prefer to use that, which allows you to use a generic
 (Say. There are a whole bunch of other life cycle methods that you may override 
 in an actor, I will not be covering those though, I will leave that as an 
 excercise for the reader) 
-instead of having separate methods for each message type seen.It is a matter of 
+instead of having just one single overriden <code>OnReceive(..)</code> method, 
+where you will neeed to decode the incoming messages seen.It is a matter of 
 taste.</p>
 <p>&nbsp;</p>
 <pre lang="cs">
@@ -532,24 +658,214 @@ class ConsoleReaderActor : UntypedActor
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<p>&nbsp;</p>
-<h2>Asking</h2>
+<h2><a name="Asking" id="Asking">Asking</a></h2>
 <p>Although I do not cover this in the demo app presented here,&nbsp; providing 
 you have a valid <code>IActorRef </code>you may of course ask it things. </p>
 <p>This is done using the <code>Ask()</code> method.</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<h2>&nbsp;</h2>
+<h2><a name="Special-Message-Types" id="Special-Message-Types">Special Message Types</a></h2>
+<p>Within
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> there are a few 
+special types of message. The 2 that spring to mind are:</p>
 <p>&nbsp;</p>
-<h2>Logging</h2>
-<p class="auto-style1">TODO Grab Url</p>
-<p class="auto-style1">TODO Grab Url</p>
-<p class="auto-style1">TODO Grab Url</p>
+<h3><a name="PoisonPill.Instance" id="PoisonPill.Instance">PoisonPill.Instance</a></h3>
+<p>Sending a <code>Akka.Actor.PoisonPill</code> to an will stop the actor when 
+the message is processed. <code>Akka.Actor.PoisonPill</code> is enqueued as 
+ordinary messages and<br />
+will be handled after messages that were already queued in the mailbox.</p>
+<p>&nbsp;</p>
+<h3><a name="Kill.Instance" id="Kill.Instance">Kill.Instance</a></h3>
+<p><code>Actor.Kill</code> causes the actor to throw an <code>
+Akka.Actor.ActorKilledException</code> when it processes the message, which gets 
+handled using the normal supervisor mechanism, and <code>
+Akka.Actor.IActorContext.Stop</code>(<code>Akka.Actor.IActorRef</code>) which 
+causes the actor to stop without processing any more messages</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<h2>&nbsp;</h2>
-<h2>Testing</h2>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h2><a name="Lifecycle-Methods" id="Lifecycle-Methods">Lifecycle Methods</a></h2>
+<p>Each actor in
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> has certain lifecycle 
+events that you may hook into. As such any actor you create you may choose to 
+override and use these lifecycle events. The demo code doesn't cover this, but 
+this diagram should help you to understand how it all works.</p>
+<p>&nbsp;</p>
+<p><a href="life1Big.png"><img alt="" height="602" src="life1Small.png" width="630" /></a></p>
+<p><em>CLICK FOR BIGGER IMAGE</em></p>
+<p>&nbsp;</p>
+<p>You can read more about this here : 
+<a href="http://getakka.net/docs/Actor%2520lifecycle">
+http://getakka.net/docs/Actor%20lifecycle</a></p>
+<p>&nbsp;</p>
+<h2><a name="&nbsp;" id="&nbsp;">&nbsp;</a></h2>
+<p>&nbsp;</p>
+<h2><a name="Logging" id="Logging">Logging</a></h2>
+<p>
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> has good support for 
+quite a few differrent logging frameworks. These days I tend to use NLog, so 
+that is what I will be showing here. There are several steps you need to follow 
+to get logging workinh, which will go through below</p>
+<p>&nbsp;</p>
+<p><strong>Step 1 : Grab The Correct Packages</strong></p>
+<p>The 1st step is to ensure you have the correct logging Dlls installed, which 
+I tend to do through NuGet. So I install this package via NuGet</p>
+<ul>
+	<li>Akka.Logger.NLog</li>
+</ul>
+<p>&nbsp;</p>
+<p><strong>Step 2 : Ensure App.Config Is Correct</strong></p>
+<p>Then we need to make sure our main App.Config logging section is correct, 
+which for the demo is as follows:</p>
+<pre lang="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;configuration&gt;
+  &lt;configSections&gt;
+    &lt;section name="nlog" type="NLog.Config.ConfigSectionHandler, NLog"/&gt;
+  &lt;/configSections&gt;
+
+  &lt;nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+    &lt;targets&gt;
+      &lt;target name="default" xsi:type="File"
+				fileName="C:\temp\WinTail.txt"
+				archiveFileName="C:\temp\WinTailArchives\WinTail-log.{#}.txt"
+				archiveEvery="Day"
+				archiveNumbering="Rolling"
+				maxArchiveFiles="7" /&gt;
+      &lt;target name="errors" xsi:type="File"
+              fileName="C:\temp\WinTail_Errors.txt"
+              archiveFileName="C:\temp\WinTailArchives\WinTail_Errors.{#}.txt"
+              archiveEvery="Day"
+              archiveNumbering="Rolling"
+              maxArchiveFiles="7" /&gt;
+    &lt;/targets&gt;
+    &lt;rules&gt;
+      &lt;logger name="*" writeTo="default" /&gt;
+      &lt;logger name="*" minlevel="Error" writeTo="errors" /&gt;
+    &lt;/rules&gt;
+  &lt;/nlog&gt;
+  
+
+&lt;/configuration&gt;
+</pre>
+<p>&nbsp;</p>
+<p><strong>Step 3 : Create The Logger File</strong></p>
+<p>We then need to create a logger that may be used with
+<a href="http://getakka.net/" target="_blank">Akka.NET</a>, which suprisre 
+suprise is itself an Actor. Let' see that now shall we: </p>
+<pre lang="cs">
+using System;
+using Akka.Actor;
+using Akka.Event;
+using NLog;
+using NLogger = global::NLog.Logger;
+
+namespace WinTail
+{
+    /// &lt;summary&gt;
+    /// This class is used to receive log events and sends them to
+    /// the configured NLog logger. The following log events are
+    /// recognized: &lt;see cref="Debug"/&gt;, &lt;see cref="Info"/&gt;,
+    /// &lt;see cref="Warning"/&gt; and &lt;see cref="Error"/&gt;.
+    /// &lt;/summary&gt;
+    public class NLogLogger : ReceiveActor
+    {
+        private readonly ILoggingAdapter log = Context.GetLogger();
+
+        private static void Log(LogEvent logEvent, Action&lt;NLogger&gt; logStatement)
+        {
+            var logger = LogManager.GetLogger(logEvent.LogClass.FullName);
+            logStatement(logger);
+        }
+
+        /// &lt;summary&gt;
+        /// Initializes a new instance of the &lt;see cref="NLogLogger"/&gt; class.
+        /// &lt;/summary&gt;
+        public NLogLogger()
+        {
+            Receive&lt;Error&gt;(m =&gt; Log(m, logger =&gt; logger.ErrorException(m.Message.ToString(), m.Cause)));
+            Receive&lt;Warning&gt;(m =&gt; Log(m, logger =&gt; logger.Warn(m.Message.ToString())));
+            Receive&lt;Info&gt;(m =&gt; Log(m, logger =&gt; logger.Info(m.Message.ToString())));
+            Receive&lt;Debug&gt;(m =&gt; Log(m, logger =&gt; logger.Debug(m.Message.ToString())));
+
+            Receive&lt;InitializeLogger&gt;(m =&gt;
+            {
+                log.Info("NLogLogger started");
+                Sender.Tell(new LoggerInitialized());
+            });
+        }
+    }
+}</pre>
+<p>&nbsp;</p>
+<p><strong>Step 4 :&nbsp; Include An Akka.Config (HOCON) file</strong></p>
+<p>We then need to create an
+<a href="http://getakka.net/" target="_blank">Akka.NET</a> config file called 
+"akka.config" which should be set to "copy always" to the snure the file is 
+present in the output directory. This file looks like this</p>
+<p>&nbsp;</p>
+<pre>akka {
+stdout-loglevel = INFO
+loglevel = INFO
+log-config-on-start = on
+loggers = ["WinTail.NLogLogger,AkkaDemo.WinTail"]
+}</pre>
+<p>&nbsp;</p>
+<p>And is loaded like this</p>
+<pre lang="cs">var config =
+ConfigurationFactory.ParseString(
+        File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "akka.config")));
+
+// make actor system 
+MyActorSystem = ActorSystem.Create("MyActorSystem", config);
+
+</pre>&nbsp;<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><strong>Step 5 :&nbsp; Let The Logging Commence</strong></p>
+<p>Now with all that good stuff in place all that is left to be done is do some 
+actual logging. Here is how we do that:</p>
+<p>&nbsp;</p>
+<pre lang="cs">
+using System;
+using Akka.Actor;
+using Akka.Event;
+
+namespace WinTail
+{
+    class ConsoleWriterActor : UntypedActor
+    {
+        private readonly ILoggingAdapter log = Context.GetLogger();
+
+        protected override void OnReceive(object message)
+        {
+            if (message is Messages.InputError)
+            {
+                var msg = message as Messages.InputError;
+                log.Error("Messages.InputError seen : " + msg.Reason);
+				....
+            }
+            else if (message is Messages.InputSuccess)
+            {
+                var msg = message as Messages.InputSuccess;
+                log.Info("Messages.InputSuccess seen : " + msg.Reason);
+                ....
+            }
+            else
+            {
+                log.Info(message.ToString());
+                ....
+            }
+
+            ....
+        }
+    }
+}</pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h2><a name="&nbsp;" id="&nbsp;">&nbsp;</a></h2>
+<h2><a name="Testing" id="Testing">Testing</a></h2>
 <p>In order to test
 <a href="http://getakka.net/" target="_blank">Akka.NET</a> we must install a few 
 more libraries, namely:</p>
@@ -592,7 +908,7 @@ public class TailActorTests : TestKit
 </ol>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<h2>The Actual Demo App</h2>
+<h2><a name="The-Actual-Demo-App" id="The-Actual-Demo-App">The Actual Demo App</a></h2>
 <p>As I stated a while ago the demo app has been pretty much lifted from the
 <a href="http://getakka.net/" target="_blank">Akka.NET</a> training material. 
 Let's just go through what the demo app does:</p>
@@ -611,8 +927,15 @@ Let's just go through what the demo app does:</p>
 	that is being tailed) to the console.</li>
 </ol>
 <p>&nbsp;</p>
+<p><strong>Steps to run the demo app:</strong></p>
+<ol>
+	<li>Create a text file somewhere. Open this text file</li>
+	<li>Run the demo app code. When asked, tell it the path of the text file you created</li>
+	<li>Edit the text file you created, save it after each edit, and then watch the actor system demo show you the changes</li>
+</ol>
 <p>&nbsp;</p>
-<h1>That's It</h1>
+<p>&nbsp;</p>
+<h1><a name="That's-It" id="That's-It">That's It</a></h1>
 <p>That's is all I wanted to say this time, I hope it may has been of interest 
 to at least a few of you. As always if you like what you have seen, please take 
 a minute to cast a vote, or leave a comment this are always appreciated</p>

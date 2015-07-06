@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 using Akka.Actor;
+using Akka.Event;
 
 namespace WinTail
 {
@@ -62,6 +63,7 @@ namespace WinTail
         private FileObserver _observer;
         private Stream _fileStream;
         private StreamReader _fileStreamReader;
+        private readonly ILoggingAdapter log = Context.GetLogger();
 
         public TailActor(IActorRef reporterActor, string filePath)
         {
@@ -104,6 +106,7 @@ namespace WinTail
         {
             if (message is FileWrite)
             {
+                log.Info("FileWrite seen");
                 // move file cursor forward
                 // pull results from cursor to end of file and write to output
                 // (tis is assuming a log file type format that is append-only)
@@ -116,11 +119,13 @@ namespace WinTail
             }
             else if (message is FileError)
             {
+                log.Error("FileError seen");
                 var fe = message as FileError;
                 _reporterActor.Tell(string.Format("Tail error: {0}", fe.Reason));
             }
             else if (message is InitialRead)
             {
+                log.Info("InitialRead seen");
                 var ir = message as InitialRead;
                 _reporterActor.Tell(ir.Text);
             }

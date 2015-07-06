@@ -1,5 +1,7 @@
 using System;
+using System.IO;
 using Akka.Actor;
+using Akka.Event;
 
 namespace WinTail
 {
@@ -11,15 +13,19 @@ namespace WinTail
     {
         public const string StartCommand = "start";
         public const string ExitCommand = "exit";
+        private readonly ILoggingAdapter log = Context.GetLogger();
 
         protected override void OnReceive(object message)
         {
             if (message.Equals(StartCommand))
             {
+                log.Info("Start Command seen");
                 DoPrintInstructions();
             }
 
             GetAndValidateInput();
+
+
         }
 
 

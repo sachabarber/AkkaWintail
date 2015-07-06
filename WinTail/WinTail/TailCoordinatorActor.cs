@@ -1,5 +1,6 @@
 ﻿using System;
 using Akka.Actor;
+using Akka.Event;
 
 namespace WinTail
 {
@@ -37,12 +38,17 @@ namespace WinTail
 
         #endregion
 
+        private readonly ILoggingAdapter log = Context.GetLogger();
+
         protected override void OnReceive(object message)
         {
             if (message is StartTail)
             {
+                log.Info("StartTail seen");
                 var msg = message as StartTail;
                 Context.ActorOf(Props.Create(() => new TailActor(msg.ReporterActor, msg.FilePath)));
+
+               
             }
 
         }

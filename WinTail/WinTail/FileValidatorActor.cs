@@ -1,5 +1,6 @@
 using System.IO;
 using Akka.Actor;
+using Akka.Event;
 
 namespace WinTail
 {
@@ -9,6 +10,7 @@ namespace WinTail
     public class FileValidatorActor : UntypedActor
     {
         private readonly IActorRef _consoleWriterActor;
+        private readonly ILoggingAdapter log = Context.GetLogger();
 
         public FileValidatorActor(IActorRef consoleWriterActor)
         {
@@ -20,6 +22,8 @@ namespace WinTail
             var msg = message as string;
             if (string.IsNullOrEmpty(msg))
             {
+                log.Error("Empty filename");
+
                 // signal that the user needs to supply an input
                 _consoleWriterActor.Tell(new Messages.NullInputError("Input was blank. Please try again.\n"));
 
@@ -31,6 +35,7 @@ namespace WinTail
                 var valid = IsFileUri(msg);
                 if (valid)
                 {
+                    log.Info("File is valid");
                     // signal successful input
                     _consoleWriterActor.Tell(new Messages.InputSuccess(string.Format("Starting processing for {0}", msg)));
 
@@ -39,6 +44,8 @@ namespace WinTail
                 }
                 else
                 {
+                    log.Error("File is invalid");
+                    
                     // signal that input was bad
                     _consoleWriterActor.Tell(new Messages.ValidationError(string.Format("{0} is not an existing URI on disk.", msg)));
 

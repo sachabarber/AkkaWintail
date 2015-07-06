@@ -1,4 +1,7 @@
-﻿using Akka.Actor;
+﻿using System;
+using System.IO;
+using Akka.Actor;
+using Akka.Configuration;
 
 namespace WinTail
 {
@@ -6,10 +9,16 @@ namespace WinTail
     {
         public static ActorSystem MyActorSystem;
 
+
         static void Main(string[] args)
         {
+
+            var config =
+                ConfigurationFactory.ParseString(
+                    File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "akka.config")));
+
             // make actor system 
-            MyActorSystem = ActorSystem.Create("MyActorSystem");
+            MyActorSystem = ActorSystem.Create("MyActorSystem", config);
 
             // create top-level actors within the actor system
             Props consoleWriterProps = Props.Create<ConsoleWriterActor>();
